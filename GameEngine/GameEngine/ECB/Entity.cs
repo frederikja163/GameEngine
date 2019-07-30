@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using GameEngine.Events;
+
 namespace GameEngine.ECB
 {
     /// <summary>
@@ -39,18 +41,6 @@ namespace GameEngine.ECB
         /// <returns>The component with given index.</returns>
         public object this[int i] { get { return _components[i]; } set { _components[i] = value; } }
 
-        internal void SetWorld(World world, int id)
-        {
-            _world = world;
-            _id = id;
-        }
-
-        internal void RemoveWorld()
-        {
-            _world = null;
-            _id = -1;
-        }
-
         /// <summary>
         /// Finds and returns the index of the first component inside this entity matching the given type.
         /// </summary>
@@ -80,7 +70,7 @@ namespace GameEngine.ECB
         public bool HasComponents(Type[] types, out object[] components)
         {
             //Setup.
-            components = new object[types.Length];
+            object[] comp = new object[types.Length];
             int index = 0;
 
             //Loop through all the components and types to see if any are a match.
@@ -90,11 +80,14 @@ namespace GameEngine.ECB
                 {
                     if (_components[i].GetType() == types[j])//If they are a match put them into the components array.
                     {
-                        components[index++] = _components[i];
+                        comp[index++] = _components[i];
                         break;
                     }
                 }
             }
+
+            components = new object[index];
+            comp.CopyTo(components, 0);
 
             //Returns, based on wether or not all components where found.
             if (index == types.Length)
@@ -174,6 +167,42 @@ namespace GameEngine.ECB
         public void AddComponents(params object[] components)
         {
             _components.Add(components);
+
+            EventManager.RaiseComponentsAdded(this, components);
+        }
+
+        internal void SetWorld(World world, int id)
+        {
+            _world = world;
+            _id = id;
+
+
+            EventManager.RaiseEntityAdded(this);
+        }
+
+        internal void RemoveWorld()
+        {
+            _world = null;
+            _id = -1;
+
+            EventManager.RaiseEntityRemoved(this);
+        }
+
+        public void RemoveComponents(Predicate<object> match)
+        {
+            object[] components = new object[_components.Count];
+            int index = 0;
+
+            for (int i = 0; i < _components.Count; i++)
+            {
+                if (match.Invoke(_components[i]))
+                {
+                    components[index++] = _components[i];
+                    _components.RemoveAt(i--);
+                }
+            }
+
+            EventManager.RaiseComponentsRemoved(this, components);
         }
     }
 }

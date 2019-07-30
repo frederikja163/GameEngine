@@ -1,24 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+
+using GameEngine.Events;
 
 namespace GameEngine.ECB
 {
-    /// <summary>
-    /// An attribute hinting at the entity-component-behaviour system a class is a behaviour.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
-    public class BehaviourAttribute : Attribute
-    {
-
-    }
-
     /// <summary>
     /// A basic behaviour implementation for the entity-component-behaviour system.
     /// </summary>
     public abstract class Behaviour
     {
-        private List<BehaviourEntity> _entities = new List<BehaviourEntity>(); //TODO: subscribe to addComponent and removeComponent events to add and remove entities.
+        private List<BehaviourEntity> _entities = new List<BehaviourEntity>();
         private Type[] _types;
 
         private struct BehaviourEntity
@@ -40,6 +32,10 @@ namespace GameEngine.ECB
         protected Behaviour(Type[] types) //TODO: Add ability to chose which event this behaviour should suscribe to.
         {
             _types = types;
+
+            EventManager.OnEntityCreated += EntityCreated;
+            EventManager.OnComponentsAdded += ComponentsAdded;
+            EventManager.OnComponentsRemoved += ComponentsRemoved;
         }
 
         /// <summary>
@@ -55,7 +51,7 @@ namespace GameEngine.ECB
         /// <param name="entity">The entity accepted by this behaviour.</param>
         /// <param name="components">The components accepted by this behaviour.</param>
         /// <returns>Is this entity something to be added to the behaviour.</returns>
-        protected virtual bool EntityAdded(Entity entity, object components)
+        protected virtual bool EntityAdded(Entity entity, object[] components)
         {
             return true;
         }
@@ -84,7 +80,7 @@ namespace GameEngine.ECB
             _entities.Add(new BehaviourEntity(entity, comp));
         }
 
-        internal void ComponentAdded(Entity entity, object component)
+        internal void ComponentsAdded(Entity entity, object[] components)
         {
             if (_entities.Exists(x => x.Entity == entity))
             {
@@ -94,16 +90,19 @@ namespace GameEngine.ECB
             EntityCreated(entity);
         }
 
-        internal void ComponentRemoved(Entity entity, object component)
+        internal void ComponentsRemoved(Entity entity, object[] components)
         {
             //Is the removed component part of the accepted types.
             bool found = false;
-            for (int i = 0; i < _types.Length; i++)
+            for (int i = 0; i < _types.Length && !found; i++)
             {
-                if (component.GetType() == _types[i])
+                for (int j = 0; j < components.Length; j++)
                 {
-                    found = true;
-                    break;
+                    if (components[j].GetType() == _types[i])
+                    {
+                        found = true;
+                        break;
+                    }
                 }
             }
             if (!found)
