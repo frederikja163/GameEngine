@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using GameEngine.Events;
+using GameEngine.EventSystem;
 
-namespace GameEngine.ECB
+namespace GameEngine.EntitySystem
 {
     /// <summary>
     /// A single entity inside the Entity-Component-Behaviour system.
@@ -11,16 +11,17 @@ namespace GameEngine.ECB
     public class Entity
     {
         private int _id = -1;
-        private List<object> _components = new List<object>();
+        private List<IComponent> _components = new List<IComponent>();
         private World _world;
 
         /// <summary>
         /// Initializes a new entity.
         /// </summary>
         /// <param name="components">Components to initialize the entity with.</param>
-        public Entity(params object[] components)
+        public Entity(params IComponent[] components)
         {
             _components.Add(components);
+            EventManager.RaiseEntityCreated(this);
         }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace GameEngine.ECB
         /// </summary>
         /// <param name="i">The index of the component to get or set.</param>
         /// <returns>The component with given index.</returns>
-        public object this[int i] { get { return _components[i]; } set { _components[i] = value; } }
+        public IComponent this[int i] { get { return _components[i]; } set { _components[i] = value; } }
 
         /// <summary>
         /// Finds and returns the index of the first component inside this entity matching the given type.
@@ -164,7 +165,7 @@ namespace GameEngine.ECB
         /// Adds components to this entity.
         /// </summary>
         /// <param name="components">An array containing components to be added.</param>
-        public void AddComponents(params object[] components)
+        public void AddComponents(params IComponent[] components)
         {
             _components.Add(components);
 
@@ -188,9 +189,9 @@ namespace GameEngine.ECB
             EventManager.RaiseEntityRemoved(this);
         }
 
-        public void RemoveComponents(Predicate<object> match)
+        public void RemoveComponents(Predicate<IComponent> match)
         {
-            object[] components = new object[_components.Count];
+            IComponent[] components = new IComponent[_components.Count];
             int index = 0;
 
             for (int i = 0; i < _components.Count; i++)

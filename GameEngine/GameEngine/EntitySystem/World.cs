@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GameEngine.ECB
+namespace GameEngine.EntitySystem
 {
     /// <summary>
     /// A world containing entities in the Entity-Component-Behaviour system

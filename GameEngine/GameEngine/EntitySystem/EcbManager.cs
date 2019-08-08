@@ -2,51 +2,46 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace GameEngine.ECB
+namespace GameEngine.EntitySystem
 {
     /// <summary>
     /// Manages the entity-component-behaviour system.
     /// </summary>
-    public static class EcbManager
+    public static class EntityManager
     {
-        private static bool _initialized = false;
-        private static List<object> _behaviours = new List<object>();
-
-        internal static bool Initialized { get => _initialized; }
+        private static List<IBehaviour> _behaviours = new List<IBehaviour>();
 
         /// <summary>
         /// Initializes the entity-component-behaviour system
         /// </summary>
         public static void Init()
         {
-            _initialized = true;
-
-            LoadBehavioursFromAssembly(Assembly.GetExecutingAssembly());
+            LoadBehaviours(Assembly.GetExecutingAssembly());
         }
 
         /// <summary>
         /// Loads all types from one assembly initializes all types decorated with <see cref="BehaviourAttribute"/>.
         /// </summary>
         /// <param name="assembly">The assembly to load types from.</param>
-        public static void LoadBehavioursFromAssembly(Assembly assembly)
+        public static void LoadBehaviours(Assembly assembly)
         {
-            LoadBehavioursFromAssembly(assembly.GetTypes());
+            LoadBehaviours(assembly.GetTypes());
         }
 
 
         /// <summary>
-        /// 
+        /// Load behaviours from an array of types.
         /// </summary>
-        /// <param name="types"></param>
-        public static void LoadBehavioursFromAssembly(Type[] types)
+        /// <param name="types">The types to load behaviours from.</param>
+        public static void LoadBehaviours(Type[] types)
         {
             for (int i = 0; i < types.Length; i++)
             {
-                if (types[i].GetCustomAttribute<BehaviourAttribute>() == null)
+                if (types[i].IsAssignableFrom(typeof(IBehaviour)))
                 {
                     continue;
                 }
-                _behaviours.Add(Activator.CreateInstance(types[i]));
+                _behaviours.Add(Activator.CreateInstance(types[i]) as IBehaviour);
             }
         }
     }

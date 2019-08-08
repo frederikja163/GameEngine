@@ -1,8 +1,8 @@
 ﻿using System;
 
-using GameEngine.ECB;
+using GameEngine.EntitySystem;
 
-namespace GameEngine.Events
+namespace GameEngine.EventSystem
 {
     /// <summary>
     /// Manages the event system.
@@ -34,6 +34,21 @@ namespace GameEngine.Events
         /// </summary>
         public static event Action<Entity> OnEntityCreated;
 
+        /// <summary>
+        /// Called once per frame before the update.
+        /// </summary>
+        public static event Action OnPreUpdate;
+
+        /// <summary>
+        /// Called once per frame.
+        /// </summary>
+        public static event Action OnUpdate;
+
+        /// <summary>
+        /// Called once per frame after the update.
+        /// </summary>
+        public static event Action OnPostUpdate;
+
         internal static void RaiseComponentsAdded(Entity entity, object[] components)
         {
             OnComponentsAdded?.Invoke(entity, components);
@@ -52,6 +67,26 @@ namespace GameEngine.Events
         internal static void RaiseEntityRemoved(Entity entity)
         {
             OnEntityRemoved?.Invoke(entity);
+        }
+        
+        internal static void RaiseEntityCreated(Entity entity)
+        {
+            OnEntityCreated?.Invoke(entity);
+        }
+
+        internal static void RaisePreUpdate()
+        {
+            OnPreUpdate?.Invoke();
+        }
+
+        internal static void RaiseUpdate()
+        {
+            OnUpdate?.Invoke();
+        }
+
+        internal static void RaisePostUpdate()
+        {
+            OnPostUpdate?.Invoke();
         }
     }
 }

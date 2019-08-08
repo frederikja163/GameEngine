@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using GameEngine.Events;
+using GameEngine.EventSystem;
 
-namespace GameEngine.ECB
+namespace GameEngine.EntitySystem
 {
     /// <summary>
     /// A basic behaviour implementation for the entity-component-behaviour system.
@@ -29,13 +29,28 @@ namespace GameEngine.ECB
         /// Initializes a new behaviour.
         /// </summary>
         /// <param name="types">The types this behaviour will accept.</param>
-        protected Behaviour(Type[] types) //TODO: Add ability to chose which event this behaviour should suscribe to.
+        protected Behaviour(Type[] types, UpdateOrder updateTime = UpdateOrder.Update)
         {
             _types = types;
 
             EventManager.OnEntityCreated += EntityCreated;
             EventManager.OnComponentsAdded += ComponentsAdded;
             EventManager.OnComponentsRemoved += ComponentsRemoved;
+
+            switch (updateTime)
+            {
+                case UpdateOrder.PreUpdate:
+                    EventManager.OnPreUpdate += Update;
+                    break;
+                case UpdateOrder.Update:
+                    EventManager.OnUpdate += Update;
+                    break;
+                case UpdateOrder.PostUpdate:
+                    EventManager.OnPostUpdate += Update;
+                    break;
+                default:
+                    break;
+            }
         }
 
         /// <summary>
