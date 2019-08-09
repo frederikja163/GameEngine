@@ -8,7 +8,7 @@ namespace GameEngine.EntitySystem
     /// <summary>
     /// A single entity inside the Entity-Component-Behaviour system.
     /// </summary>
-    public class Entity
+    public class Entity //struct? also make something like an entity-prefab
     {
         private int _id = -1;
         private List<IComponent> _components = new List<IComponent>();
