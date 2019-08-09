@@ -8,7 +8,7 @@ namespace GameEngine.EntitySystem
     /// <summary>
     /// A single entity inside the Entity-Component-Behaviour system.
     /// </summary>
-    public class Entity
+    public class Entity //struct? also make something like an entity-prefab
     {
         private int _id = -1;
         private List<IComponent> _components = new List<IComponent>();
@@ -20,7 +20,7 @@ namespace GameEngine.EntitySystem
         /// <param name="components">Components to initialize the entity with.</param>
         public Entity(params IComponent[] components)
         {
-            _components.Add(components);
+            _components.AddRange(components);
             EventManager.RaiseEntityCreated(this);
         }
 
@@ -167,7 +167,7 @@ namespace GameEngine.EntitySystem
         /// <param name="components">An array containing components to be added.</param>
         public void AddComponents(params IComponent[] components)
         {
-            _components.Add(components);
+            _components.AddRange(components);
 
             EventManager.RaiseComponentsAdded(this, components);
         }
