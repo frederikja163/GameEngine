@@ -12,14 +12,6 @@ namespace GameEngine.EntitySystem
         private static List<IBehaviour> _behaviours = new List<IBehaviour>();
 
         /// <summary>
-        /// Initializes the entity-component-behaviour system
-        /// </summary>
-        public static void Init()
-        {
-            LoadBehaviours(Assembly.GetExecutingAssembly());
-        }
-
-        /// <summary>
         /// Loads all types from one assembly initializes all types decorated with <see cref="BehaviourAttribute"/>.
         /// </summary>
         /// <param name="assembly">The assembly to load types from.</param>

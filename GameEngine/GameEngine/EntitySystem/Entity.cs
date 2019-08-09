@@ -20,7 +20,7 @@ namespace GameEngine.EntitySystem
         /// <param name="components">Components to initialize the entity with.</param>
         public Entity(params IComponent[] components)
         {
-            _components.Add(components);
+            _components.AddRange(components);
             EventManager.RaiseEntityCreated(this);
         }
 
@@ -167,7 +167,7 @@ namespace GameEngine.EntitySystem
         /// <param name="components">An array containing components to be added.</param>
         public void AddComponents(params IComponent[] components)
         {
-            _components.Add(components);
+            _components.AddRange(components);
 
             EventManager.RaiseComponentsAdded(this, components);
         }
