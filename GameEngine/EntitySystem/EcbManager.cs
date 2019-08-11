@@ -25,15 +25,14 @@ namespace GameEngine.EntitySystem
         /// Load behaviours from an array of types.
         /// </summary>
         /// <param name="types">The types to load behaviours from.</param>
-        public static void LoadBehaviours(Type[] types)
+        public static void LoadBehaviours(params Type[] types)
         {
             for (int i = 0; i < types.Length; i++)
             {
-                if (types[i].IsAssignableFrom(typeof(IBehaviour)))
+                if (types[i].IsAssignableFrom(typeof(IBehaviour)) && types[i].GetCustomAttribute<BehaviourTemplateAttribute>() == null)
                 {
-                    continue;
+                    _behaviours.Add(Activator.CreateInstance(types[i]) as IBehaviour);
                 }
-                _behaviours.Add(Activator.CreateInstance(types[i]) as IBehaviour);
             }
         }
     }

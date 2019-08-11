@@ -185,11 +185,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Projects\\Personal projects\\GameEngine\\GameEngine\\GameEngine\\GameEngine.csproj",
+      "projectUniqueName": "D:\\Projects\\Personal\\GameEngine\\GameEngine\\GameEngine.csproj",
       "projectName": "GameEngine",
-      "projectPath": "D:\\Projects\\Personal projects\\GameEngine\\GameEngine\\GameEngine\\GameEngine.csproj",
+      "projectPath": "D:\\Projects\\Personal\\GameEngine\\GameEngine\\GameEngine.csproj",
       "packagesPath": "C:\\Users\\fjapl\\.nuget\\packages\\",
-      "outputPath": "D:\\Projects\\Personal projects\\GameEngine\\GameEngine\\GameEngine\\obj\\",
+      "outputPath": "D:\\Projects\\Personal\\GameEngine\\GameEngine\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

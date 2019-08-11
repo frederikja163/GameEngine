@@ -8,7 +8,7 @@ namespace GameEngine.EntitySystem
     /// <summary>
     /// A basic behaviour implementation for the entity-component-behaviour system.
     /// </summary>
-    public abstract class Behaviour
+    public abstract class Behaviour : IBehaviour
     {
         private List<BehaviourEntity> _entities = new List<BehaviourEntity>();
         private Type[] _types;
