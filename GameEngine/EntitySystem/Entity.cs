@@ -57,7 +57,7 @@ namespace GameEngine.EntitySystem
         /// </summary>
         /// <param name="match">A predicate used to search for the component.</param>
         /// <returns>The index of the first component matching the predicate, or -1 if none found.</returns>
-        public int GetComponentIndex(Predicate<object> match)
+        public int GetComponentIndex(Predicate<IComponent> match)
         {
             return _components.FindIndex(match);
         }
@@ -66,9 +66,9 @@ namespace GameEngine.EntitySystem
         /// Checks wether or not this entity has components of the types provided.
         /// </summary>
         /// <param name="types">The types to check for.</param>
-        /// <param name="components">An array containing all the components the entity has if any, otherwise null.</param>
+        /// <param name="components">An array containing all the components the entity has.</param>
         /// <returns>Does this entity have all the components.</returns>
-        public bool HasComponents(Type[] types, out object[] components)
+        public bool HasComponents(Type[] types, out IComponent[] components)
         {
             //Setup.
             object[] comp = new object[types.Length];
@@ -87,13 +87,12 @@ namespace GameEngine.EntitySystem
                 }
             }
 
-            components = new object[index];
+            components = new IComponent[index];
             comp.CopyTo(components, 0);
 
             //Returns, based on wether or not all components where found.
             if (index == types.Length)
             {
-                components = null;
                 return false;
             }
             return true;
@@ -113,7 +112,7 @@ namespace GameEngine.EntitySystem
         /// Find and returns the indices of all components inside this entity matching the predicate conditions.
         /// </summary>
         /// <param name="match">A predicate used to search for the component.</param>
-        /// <returns>The indices of all components matching the predicate, or -1 if none found.</returns>
+        /// <returns>The indices of all components matching the predicate, or null if none found.</returns>
         public int[] GetComponentsIndices(Predicate<object> match)
         {
             int size = GetComponents(match).Length;
@@ -172,6 +171,30 @@ namespace GameEngine.EntitySystem
             EventManager.RaiseComponentsAdded(this, components);
         }
 
+        /// <summary>
+        /// Removes components from an entity if they match the given predicate.
+        /// </summary>
+        /// <param name="match">Predicate to check all components for.</param>
+        public void RemoveComponents(Predicate<IComponent> match)
+        {
+            IComponent[] components = new IComponent[_components.Count];
+            int index = 0;
+
+            for (int i = 0; i < _components.Count; i++)
+            {
+                if (match.Invoke(_components[i]))
+                {
+                    components[index++] = _components[i];
+                    _components.RemoveAt(i--);
+                }
+            }
+
+            IComponent[] comp = new IComponent[index];
+            components.CopyTo(comp, 0);
+
+            EventManager.RaiseComponentsRemoved(this, comp);
+        }
+
         internal void SetWorld(World world, int id)
         {
             _world = world;
@@ -189,21 +212,5 @@ namespace GameEngine.EntitySystem
             EventManager.RaiseEntityRemoved(this);
         }
 
-        public void RemoveComponents(Predicate<IComponent> match)
-        {
-            IComponent[] components = new IComponent[_components.Count];
-            int index = 0;
-
-            for (int i = 0; i < _components.Count; i++)
-            {
-                if (match.Invoke(_components[i]))
-                {
-                    components[index++] = _components[i];
-                    _components.RemoveAt(i--);
-                }
-            }
-
-            EventManager.RaiseComponentsRemoved(this, components);
-        }
     }
 }
