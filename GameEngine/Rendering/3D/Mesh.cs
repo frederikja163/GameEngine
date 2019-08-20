@@ -1,6 +1,7 @@
 ﻿using GameEngine.EntitySystem;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Numerics;
 using System.Text;
 
@@ -12,12 +13,20 @@ namespace GameEngine.Rendering._3D
     public class Mesh : IComponent
     {
         /// <summary>
+        /// Instantiate a new <see cref="Mesh"/> with a set amount of vertices.
+        /// </summary>
+        /// <param name="vertexCount">The amount of vertices.</param>
+        public Mesh(uint vertexCount)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Instantiate a new <see cref="Mesh"/>.
         /// </summary>
-        /// <param name="positions">The vertex positions of the mesh.</param>
-        /// <param name="normals">The vertex normals of the mesh.</param>
-        /// <param name="textureCoordinates">The texture coordinates of the mesh.</param>
-        public Mesh(Vector4[] positions, Vector4[] normals, params Vector2[] textureCoordinates)
+        /// <param name="vertices">The vertices of the mesh.</param>
+        /// <param name="indices">The indices of the mesh.</param>
+        public Mesh(Vertex[] vertices, uint[] indices)
         {
             throw new NotImplementedException();
         }
@@ -29,6 +38,12 @@ namespace GameEngine.Rendering._3D
         public Mesh(string path)
         {
             throw new NotImplementedException();
+        }
+
+        public Vertex this[uint vertex]
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         /// <summary>
@@ -45,6 +60,16 @@ namespace GameEngine.Rendering._3D
         /// The vertex texture coordinates of the mesh.
         /// </summary>
         public Vector2[] TextureCoordinates { get { throw new NotImplementedException(); } }
+
+        /// <summary>
+        /// Sets the vertex of a given index.
+        /// </summary>
+        /// <param name="vertexIndex">The index to set the vertex for.</param>
+        /// <param name="vertex">The new vertex at the given index.</param>
+        public void SetVertex(uint vertexIndex, Vertex vertex)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Sets the vertex position of a given vertex.
@@ -67,12 +92,32 @@ namespace GameEngine.Rendering._3D
         }
 
         /// <summary>
+        /// Sets the vertex color of a given vertex.
+        /// </summary>
+        /// <param name="vertexIndex">The index of the vertex to set the color for.</param>
+        /// <param name="color">The new color of the vertex.</param>
+        public void SetColor(uint vertexIndex, Color color)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Sets a texture coordinate of a given vertex.
         /// </summary>
         /// <param name="vertexIndex">The index of the vertex to set the texture coordinate for.</param>
         /// <param name="textureCoordinateIndex">The index of the texture coordinate to set.</param>
         /// <param name="textureCoordinate">The new texture coordinate.</param>
         public void SetTextureCoordinate(uint vertexIndex, uint textureCoordinateIndex, Vector2 textureCoordinate)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets the vertex of a given index.
+        /// </summary>
+        /// <param name="vertexIndex">The index of the vertex to get.</param>
+        /// <returns>The vertex at the given position.</returns>
+        public Vertex GetVertex(uint vertexIndex)
         {
             throw new NotImplementedException();
         }
@@ -93,6 +138,16 @@ namespace GameEngine.Rendering._3D
         /// <param name="vertexIndex">The index of the vertex to get the normal for.</param>
         /// <returns>The normal of the given vertex.</returns>
         public Vector4 GetNormal(uint vertexIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets the color of a given vertex.
+        /// </summary>
+        /// <param name="vertexIndex">The index of the vertex to set the color for.</param>
+        /// <returns>The color of the given vertex.</returns>
+        public Color GetColor(uint vertexIndex)
         {
             throw new NotImplementedException();
         }
