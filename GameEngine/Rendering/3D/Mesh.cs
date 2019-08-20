@@ -11,10 +11,6 @@ namespace GameEngine.Rendering._3D
     /// </summary>
     public class Mesh : IComponent
     {
-        private float[] _vertexData;
-        private uint _textureCoordinateCount;
-        private uint _vertexCount;
-
         /// <summary>
         /// Instantiate a new <see cref="Mesh"/>.
         /// </summary>
@@ -22,6 +18,15 @@ namespace GameEngine.Rendering._3D
         /// <param name="normals">The vertex normals of the mesh.</param>
         /// <param name="textureCoordinates">The texture coordinates of the mesh.</param>
         public Mesh(Vector4[] positions, Vector4[] normals, params Vector2[] textureCoordinates)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Load a <see cref="Mesh"/> from the hard drive.
+        /// </summary>
+        /// <param name="path">The path of the mesh.</param>
+        public Mesh(string path)
         {
             throw new NotImplementedException();
         }
